@@ -20,4 +20,13 @@ public class HostController {
 		System.out.println(userRepository.findAll());
 		return users;
 	}
+	
+	@RequestMapping(value="/saveUser", method=RequestMethod.GET)
+	public void saveUser() {
+		User user = new User();
+		user.setUserType("Host");
+		user.setName("aditi");
+		userRepository.save(user);
+	}
+
 }
