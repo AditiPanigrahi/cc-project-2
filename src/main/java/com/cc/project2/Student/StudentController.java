@@ -1,5 +1,6 @@
 package com.cc.project2.Student;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tomcat.util.json.JSONParser;
@@ -15,6 +16,7 @@ import com.cc.project2.User.AccomodationRepository;
 import com.cc.project2.User.HostRequest;
 import com.cc.project2.User.User;
 import com.cc.project2.User.UserRepository;
+import com.mysql.fabric.xmlrpc.base.Array;
 
 @RestController
 public class StudentController {
@@ -31,8 +33,17 @@ public class StudentController {
 	}
 
 	@PostMapping("/newStudentListing")
-	Accomodation newHostListing(@RequestBody Accomodation accomodation) {
-		return AccomodationRepository.save(accomodation);
+	List<Accomodation> newHostListing(@RequestBody Accomodation accomodation) {
+		Accomodation studentAccomodation = AccomodationRepository.save(accomodation);
+		List<Accomodation> hostListings  = new ArrayList<Accomodation>();
+		if(studentAccomodation != null && studentAccomodation.getUserType()!=null 
+				&& studentAccomodation.getRoommatePreference()!=null && studentAccomodation.getStartDate()!=null) {
+		hostListings = AccomodationRepository.findByUserTypeAndRoommatePreferenceAndStartDate
+				(studentAccomodation.getUserType(), studentAccomodation.getRoommatePreference(), 
+						studentAccomodation.getStartDate());
+		}
+		return hostListings;
+		
 	}
 	
 	

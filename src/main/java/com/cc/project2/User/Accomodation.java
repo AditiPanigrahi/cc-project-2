@@ -11,6 +11,7 @@ import javax.persistence.Table;
 public class Accomodation {
 		@Id
 	 	private Long userId;
+		private String userType;
 	    private String startDate;
 	    private String endDate;
 	    private String roommatePreference;
@@ -69,6 +70,12 @@ public class Accomodation {
 		}
 		public void setOtherInfo(String otherInfo) {
 			this.otherInfo = otherInfo;
+		}
+		public String getUserType() {
+			return userType;
+		}
+		public void setUserType(String userType) {
+			this.userType = userType;
 		}
 		
 }
