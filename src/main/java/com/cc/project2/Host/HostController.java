@@ -1,4 +1,4 @@
-package com.cc.Host;
+package com.cc.project2.Host;
 
 import java.util.List;
 
@@ -7,17 +7,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cc.User.User;
-import com.cc.User.UserRepository;
+import com.cc.project2.User.User;
+import com.cc.project2.User.UserRepository;
 
 @RestController
 public class HostController {
+	
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepository UserRepository;
+	
 	@RequestMapping(value="/getUsers", method=RequestMethod.GET)
 	public List<User> getUser() {
-		List<User> users = (List<User>) userRepository.findAll();
-		System.out.println(userRepository.findAll());
+		List<User> users = (List<User>) UserRepository.findAll();
+		System.out.println(UserRepository.findAll());
 		return users;
 	}
 	
@@ -26,7 +28,7 @@ public class HostController {
 		User user = new User();
 		user.setUserType("Host");
 		user.setName("aditi");
-		userRepository.save(user);
+		UserRepository.save(user);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.cc.User;
+package com.cc.project2.User;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,8 +9,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "User")
 public class User {
-	 @Id
-	    @GeneratedValue(strategy=GenerationType.AUTO)
+	 	@Id
+	    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	    private Long userId;
 	    private String name;
 	    private String userType;
