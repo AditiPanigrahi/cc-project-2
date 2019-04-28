@@ -3,20 +3,17 @@ package com.cc.project2.Student;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cc.project2.User.Accomodation;
-import com.cc.project2.User.AccomodationRepository;
-import com.cc.project2.User.HostRequest;
-import com.cc.project2.User.User;
-import com.cc.project2.User.UserRepository;
-import com.mysql.fabric.xmlrpc.base.Array;
+import com.cc.project2.UserParent.Accomodation;
+import com.cc.project2.UserParent.AccomodationRepository;
+import com.cc.project2.UserParent.User;
+import com.cc.project2.UserParent.UserAccomodationParentObject;
+import com.cc.project2.UserParent.UserRepository;
 
 @RestController
 public class StudentController {
@@ -27,23 +24,31 @@ public class StudentController {
 	@Autowired
 	private AccomodationRepository AccomodationRepository;
 	
-	@PostMapping("/newUser")
-	User newUser(@RequestBody User student) {
-		return UserRepository.save(student);
-	}
-
-	@PostMapping("/newStudentListing")
-	List<Accomodation> newHostListing(@RequestBody Accomodation accomodation) {
-		Accomodation studentAccomodation = AccomodationRepository.save(accomodation);
+	@PostMapping("/generateStudentProfile")
+	public List<Accomodation> newHostListing(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
+		
 		List<Accomodation> hostListings  = new ArrayList<Accomodation>();
-		if(studentAccomodation != null && studentAccomodation.getUserType()!=null 
-				&& studentAccomodation.getRoommatePreference()!=null && studentAccomodation.getStartDate()!=null) {
-		hostListings = AccomodationRepository.findByUserTypeAndRoommatePreferenceAndStartDate
-				(studentAccomodation.getUserType(), studentAccomodation.getRoommatePreference(), 
-						studentAccomodation.getStartDate());
+		if(userAccomodationParentObject!=null) {
+			User user = userAccomodationParentObject.getUser();
+			Accomodation accomodation = userAccomodationParentObject.getAccomodation();
+			if(user!=null) {
+				if(user.getUserType().toLowerCase()=="student") {
+					return null;
+				}
+				UserRepository.save(user);
+			}
+			if(accomodation!=null) {
+				AccomodationRepository.save(accomodation);
+				if(accomodation != null && accomodation.getUserType()!=null 
+						&& accomodation.getRoommatePreference()!=null && accomodation.getStartDate()!=null) {
+				hostListings = AccomodationRepository.findByUserTypeAndRoommatePreferenceAndStartDate
+						(accomodation.getUserType(), accomodation.getRoommatePreference(), 
+								accomodation.getStartDate());
+				}
+				return hostListings;
+			}
 		}
 		return hostListings;
-		
 	}
 	
 	

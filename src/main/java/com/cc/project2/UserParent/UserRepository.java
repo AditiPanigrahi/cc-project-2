@@ -1,4 +1,4 @@
-package com.cc.project2.User;
+package com.cc.project2.UserParent;
 
 
 import org.springframework.data.repository.CrudRepository;
