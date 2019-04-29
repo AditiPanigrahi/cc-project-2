@@ -3,8 +3,9 @@ package com.cc.project2.Host;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,8 @@ import com.cc.project2.UserParent.User;
 import com.cc.project2.UserParent.UserAccomodationParentObject;
 import com.cc.project2.UserParent.UserRepository;
 
+
+@CrossOrigin
 @RestController
 public class HostController {
 	
@@ -28,21 +31,18 @@ public class HostController {
 	
 
 	@PostMapping("/generateHostProfile")
-	public List<Accomodation> newHostListing(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
+	public void newHostListing(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
 		if(userAccomodationParentObject!=null) {
 			User user = userAccomodationParentObject.getUser();
 			Accomodation accomodation = userAccomodationParentObject.getAccomodation();
 			if(user!=null) {
-				if(user.getUserType().toLowerCase()=="host") {
-					return null;
-				}
 				UserRepository.save(user);
 			}
 			if(accomodation!=null) {
 				AccomodationRepository.save(accomodation);
 			}
 		}
-		return new ArrayList<Accomodation>();
+		
 	}
 		
 	@RequestMapping(value="/getUsers", method=RequestMethod.GET)
@@ -60,6 +60,5 @@ public class HostController {
 		//user.setName("noname");
 		return user;
 	}
-	
-	
+		
 }

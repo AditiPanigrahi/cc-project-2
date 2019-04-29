@@ -10,7 +10,8 @@ import javax.persistence.Table;
 @Table(name = "Accomodation")
 public class Accomodation {
 		@Id
-	 	private Long userId;
+		@GeneratedValue(strategy=GenerationType.IDENTITY)
+	 	private Long acId;
 		private String userType;
 	    private String startDate;
 	    private String endDate;
@@ -20,15 +21,18 @@ public class Accomodation {
 	    private String noOfRooms;
 	    private String noOfBathrooms;
 	    private String address;
+	    private String username;
 	    //for Student
 	    //nothing yet!
-	    
-		public Long getUserId() {
-			return userId;
+	   
+	   
+	    public Long getAcId() {
+			return acId;
 		}
-		public void setUserId(Long userId) {
-			this.userId = userId;
+		public void setAcId(Long acId) {
+			this.acId = acId;
 		}
+		
 		public String getStartDate() {
 			return startDate;
 		}
@@ -76,6 +80,13 @@ public class Accomodation {
 		}
 		public void setUserType(String userType) {
 			this.userType = userType;
+		}
+		
+		public String getUsername() {
+			return username;
+		}
+		public void setUsername(String username) {
+			this.username = username;
 		}
 		
 }
