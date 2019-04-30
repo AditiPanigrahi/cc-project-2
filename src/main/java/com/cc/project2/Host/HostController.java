@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cc.project2.UserParent.Accomodation;
 import com.cc.project2.UserParent.AccomodationRepository;
+import com.cc.project2.UserParent.AccomodationStatus;
+import com.cc.project2.UserParent.StudentHostMatch;
+import com.cc.project2.UserParent.StudentHostMatchRepository;
 import com.cc.project2.UserParent.User;
 import com.cc.project2.UserParent.UserAccomodationParentObject;
 import com.cc.project2.UserParent.UserRepository;
@@ -22,43 +25,69 @@ import com.cc.project2.UserParent.UserRepository;
 @CrossOrigin
 @RestController
 public class HostController {
-	
+
 	@Autowired
 	private UserRepository UserRepository;
-	
+
 	@Autowired
 	private AccomodationRepository AccomodationRepository;
-	
 
-	@PostMapping("/generateHostProfile")
-	public void newHostListing(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
+	@Autowired
+	private StudentHostMatchRepository studeHostMatchRepository;
+
+	@PostMapping("/generateHostHomePage")
+	public List<Accomodation> getHostListings(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
+
+		List<Accomodation> hostListings  = new ArrayList<Accomodation>();
 		if(userAccomodationParentObject!=null) {
 			User user = userAccomodationParentObject.getUser();
-			Accomodation accomodation = userAccomodationParentObject.getAccomodation();
-			if(user!=null) {
-				UserRepository.save(user);
-			}
-			if(accomodation!=null) {
-				AccomodationRepository.save(accomodation);
+			if(user==null)
+				return null;
+			//	aAccomodation accomodation = userAccomodationParentObject.getAccomodation();
+			if(user.getUserType().toLowerCase()=="host") {
+				String username = user.getUserName();
+				String password = user.getPassword();
+				List<User> userList=UserRepository.findByUserNameAndPassword(username, password);
+				if(userList==null && userList.get(0)==null) {
+					return null;
+				}
+				Long userId = userList.get(0).getUserId();
+				hostListings = AccomodationRepository.findByUsername(username);
+				if(hostListings==null || hostListings.get(0)==null) {
+					return null;
+				}
 			}
 		}
-		
+		return hostListings;
 	}
-		
-	@RequestMapping(value="/getUsers", method=RequestMethod.GET)
-	public List<User> getUser() {
-		List<User> users = (List<User>) UserRepository.findAll();
-		System.out.println(UserRepository.findAll());
-		return users;
+	@PostMapping("/getStudentRequestsAgainstAccomodation")
+	public List<User> getStudentRequestsForAccomodation(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
+		List<User> studentsForAccomodation = new ArrayList<User>();
+		if(userAccomodationParentObject!=null) {
+
+			User user = userAccomodationParentObject.getUser();
+			Accomodation accomodation = userAccomodationParentObject.getAccomodation();
+			Long acId = accomodation.getAcId();
+			List<StudentHostMatch> matchedStudentsToListedAcc= studeHostMatchRepository.findByAcIdAndStatus(acId, "Pending");
+			for(StudentHostMatch student : matchedStudentsToListedAcc) {
+				Long studentId = student.getUserId();
+				if(studentId!=null) {
+					User studentRequest = UserRepository.findByUserId(studentId);
+					studentsForAccomodation.add(studentRequest);
+				}
+			}
+		}
+		return studentsForAccomodation;
 	}
-	
-	//test request below//
-	@RequestMapping(value="/dummyTestApi", method=RequestMethod.GET)
-	public User testApi() {
-		User user = new User();
-		user.setUserType("Host");
-		//user.setName("noname");
-		return user;
+
+
+
+	@PostMapping("/approveAccomodationFromStudent")
+	public void studentRequest(@RequestBody StudentHostMatch studentHostMatch) {
+		if(studentHostMatch == null || studentHostMatch.getAcId()==null || studentHostMatch.getUserId()==null) {
+			return;
+		}	
+		studentHostMatch.setStatus("ApprovedByHost");
+		studeHostMatchRepository.save(studentHostMatch);
 	}
-		
 }

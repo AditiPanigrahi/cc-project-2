@@ -24,8 +24,7 @@ public class Accomodation {
 	    private String username;
 	    //for Student
 	    //nothing yet!
-	   
-	   
+	     
 	    public Long getAcId() {
 			return acId;
 		}
@@ -87,6 +86,5 @@ public class Accomodation {
 		}
 		public void setUsername(String username) {
 			this.username = username;
-		}
-		
+		}	
 }
