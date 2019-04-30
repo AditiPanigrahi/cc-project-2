@@ -30,8 +30,8 @@ public class UserController {
 	private AccomodationRepository AccomodationRepository;
 	
 
-	@PostMapping("/generateUserProfile")
-	public void newHostListing(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
+	@PostMapping("/register")
+	public void register(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
 		if(userAccomodationParentObject!=null) {
 			User user = userAccomodationParentObject.getUser();
 			Accomodation accomodation = userAccomodationParentObject.getAccomodation();
