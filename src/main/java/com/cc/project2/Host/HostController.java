@@ -41,22 +41,22 @@ public class HostController {
 		List<Accomodation> hostListings  = new ArrayList<Accomodation>();
 		if(userAccomodationParentObject!=null) {
 			User user = userAccomodationParentObject.getUser();
-			if(user==null)
+			if(user==null) {
 				return null;
-			//	aAccomodation accomodation = userAccomodationParentObject.getAccomodation();
-			if(user.getUserType().toLowerCase()=="host") {
-				String username = user.getUserName();
-				String password = user.getPassword();
-				List<User> userList=UserRepository.findByUserNameAndPassword(username, password);
-				if(userList==null && userList.get(0)==null) {
-					return null;
-				}
-				Long userId = userList.get(0).getUserId();
-				hostListings = AccomodationRepository.findByUsername(username);
-				if(hostListings==null || hostListings.get(0)==null) {
-					return null;
-				}
 			}
+			//	aAccomodation accomodation = userAccomodationParentObject.getAccomodation();
+			String username = user.getUserName();
+			String password = user.getPassword();
+			List<User> userList=UserRepository.findByUserNameAndPassword(username, password);
+			if(userList==null && userList.get(0)==null) {
+				return null;
+			}
+			Long userId = userList.get(0).getUserId();
+			hostListings = AccomodationRepository.findByUsername(username);
+			if(hostListings==null || hostListings.get(0)==null) {
+				return null;
+			}
+
 		}
 		return hostListings;
 	}
