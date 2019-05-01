@@ -35,8 +35,8 @@ public class HostController {
 	@Autowired
 	private StudentHostMatchRepository studeHostMatchRepository;
 
-	@PostMapping("/generateHostHomePage")
-	public List<Accomodation> getHostListings(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
+	@PostMapping("/hostLogin")
+	public List<Accomodation> hostLogin(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
 
 		List<Accomodation> hostListings  = new ArrayList<Accomodation>();
 		if(userAccomodationParentObject!=null) {

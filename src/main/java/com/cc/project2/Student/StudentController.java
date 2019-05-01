@@ -2,12 +2,11 @@ package com.cc.project2.Student;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cc.project2.UserParent.Accomodation;
@@ -19,6 +18,7 @@ import com.cc.project2.UserParent.User;
 import com.cc.project2.UserParent.UserAccomodationParentObject;
 import com.cc.project2.UserParent.UserRepository;
 
+@CrossOrigin
 @RestController
 public class StudentController {
 
@@ -32,7 +32,7 @@ public class StudentController {
 	private StudentHostMatchRepository studentHostMatchRepository;
 
 
-	@PostMapping("/generateStudentHomePage")
+	@PostMapping("/studentLogin")
 	public List<AccomodationStatus> studentLogin(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
 		System.out.println("Matched list size 1");
 
