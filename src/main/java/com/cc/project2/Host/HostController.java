@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cc.project2.UserParent.Accomodation;
 import com.cc.project2.UserParent.AccomodationRepository;
 import com.cc.project2.UserParent.AccomodationStatus;
+import com.cc.project2.UserParent.BulkAccomodationRequest;
 import com.cc.project2.UserParent.StudentHostMatch;
 import com.cc.project2.UserParent.StudentHostMatchRepository;
 import com.cc.project2.UserParent.User;
@@ -80,8 +81,6 @@ public class HostController {
 		return studentsForAccomodation;
 	}
 
-
-
 	@PostMapping("/approveAccomodationFromStudent")
 	public void studentRequest(@RequestBody StudentHostMatch studentHostMatch) {
 		if(studentHostMatch == null || studentHostMatch.getAcId()==null || studentHostMatch.getUserId()==null) {
@@ -89,5 +88,15 @@ public class HostController {
 		}	
 		studentHostMatch.setStatus("ApprovedByHost");
 		studeHostMatchRepository.save(studentHostMatch);
+	}
+	
+	@PostMapping("/bulkAccomodation")
+	public void getBulkHostAccomodation(@RequestBody BulkAccomodationRequest bulkRequest) {
+		if(bulkRequest!=null) {
+			List<UserAccomodationParentObject> bulkRequestList = bulkRequest.getBulkList();
+			for(UserAccomodationParentObject request : bulkRequestList) {
+				hostLogin(request);
+			}
+		}
 	}
 }

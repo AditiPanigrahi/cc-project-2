@@ -17,6 +17,7 @@ import com.cc.project2.UserParent.AccomodationRepository;
 import com.cc.project2.UserParent.User;
 import com.cc.project2.UserParent.UserAccomodationParentObject;
 import com.cc.project2.UserParent.UserRepository;
+import com.cc.project2.utils.EmailUtils;
 
 
 @CrossOrigin
@@ -29,6 +30,8 @@ public class UserController {
 	@Autowired
 	private AccomodationRepository AccomodationRepository;
 	
+	@Autowired
+	private EmailUtils email;
 
 	@PostMapping("/register")
 	public void register(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
@@ -41,6 +44,7 @@ public class UserController {
 			if(accomodation!=null) {
 				AccomodationRepository.save(accomodation);
 			}
+			email.sendEmail(user.getEmailId(), "Account Registration", "Dear User, \n You are now a member of ASU Accomodation Cmmunity.\n Welcome!!");
 		}
 		
 	}
@@ -60,5 +64,11 @@ public class UserController {
 		//user.setName("noname");
 		return user;
 	}
+	
+	@RequestMapping(value="/dummyTestEmail", method=RequestMethod.GET)
+	public void testEmail() {
+		email.sendEmail("pwaykole@asu.edu", "Account Registration", "Dear User, \n You are now a member of ASU Accomodation Cmmunity.\n Welcome!!");
+	}
+
 		
 }
