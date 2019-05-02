@@ -15,6 +15,7 @@ import com.cc.project2.UserParent.AccomodationStatus;
 import com.cc.project2.UserParent.StudentHostMatch;
 import com.cc.project2.UserParent.StudentHostMatchRepository;
 import com.cc.project2.UserParent.User;
+import com.cc.project2.UserParent.UserAccomodationInfo;
 import com.cc.project2.UserParent.UserAccomodationParentObject;
 import com.cc.project2.UserParent.UserRepository;
 
@@ -33,10 +34,10 @@ public class StudentController {
 
 
 	@PostMapping("/studentLogin")
-	public List<AccomodationStatus> studentLogin(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
+	public List<UserAccomodationInfo> studentLogin(@RequestBody UserAccomodationParentObject userAccomodationParentObject) {
 		System.out.println("Matched list size 1");
 
-		List<AccomodationStatus> hostListings  = new ArrayList<AccomodationStatus>();
+		List<UserAccomodationInfo> hostListings  = new ArrayList<UserAccomodationInfo>();
 		if(userAccomodationParentObject!=null) {
 			System.out.println("Matched list size 2");
 
@@ -69,17 +70,23 @@ public class StudentController {
 			for(Accomodation matchedAc: accomodationListMatched) {
 				User student = UserRepository.findByUserName(username);
 				List<StudentHostMatch> match = studentHostMatchRepository.findByUserId(student.getUserId());
-				AccomodationStatus accomodationStatus = new AccomodationStatus();
-				accomodationStatus.setAccomodation(matchedAc);
+				UserAccomodationInfo userAccomodationInfo = new UserAccomodationInfo();
+				
+				userAccomodationInfo.setAcId(matchedAc.getAcId());
+				userAccomodationInfo.setAddress(matchedAc.getAddress());
+				userAccomodationInfo.setEndDate(matchedAc.getEndDate());
+				userAccomodationInfo.setNoOfBathrooms(matchedAc.getNoOfBathrooms());
+				userAccomodationInfo.setNoOfRooms(matchedAc.getNoOfRooms());
+				userAccomodationInfo.setStartDate(matchedAc.getStartDate());
+				userAccomodationInfo.setUsername(matchedAc.getUsername());
+				userAccomodationInfo.setRoommatePreference(matchedAc.getRoommatePreference());
+				userAccomodationInfo.setStatus("Not Selected");
 				for(StudentHostMatch studentHostMatch: match) {
 					if(matchedAc.getAcId()==studentHostMatch.getAcId()) {
-						accomodationStatus.setStatus(studentHostMatch.getStatus());
-					}
-					else {
-						accomodationStatus.setStatus(null);
+						userAccomodationInfo.setStatus(studentHostMatch.getStatus());
 					}
 				}
-				hostListings.add(accomodationStatus);
+				hostListings.add(userAccomodationInfo);
 			}
 
 		}
@@ -98,7 +105,8 @@ public class StudentController {
 		}
 		StudentHostMatch studentHostMatch = new StudentHostMatch();
 		studentHostMatch.setStatus("Pending");
-		studentHostMatch.setAcId(AccomodationRepository.findByUsername(accRequested.getUsername()).get(0).getAcId());
+		//studentHostMatch.setAcId(AccomodationRepository.findByUsername(accRequested.getUsername()).get(0).getAcId());
+		studentHostMatch.setAcId(accRequested.getAcId());
 		studentHostMatch.setUserId(UserRepository.findByUserName(student.getUserName()).getUserId());
 		studentHostMatchRepository.save(studentHostMatch);
 	}
